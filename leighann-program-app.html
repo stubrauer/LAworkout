@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="LA Program">
+<meta name="theme-color" content="#1F2A44">
+<title>Leighann · 8-Week Program</title>
+<style>
+  :root{
+    --navy:#1F2A44; --slate:#33415C; --green:#1E7A5A; --blue:#2E5E8C;
+    --purple:#5B4B8A; --orange:#C8622A; --gold:#B8860B;
+    --bg:#F4F5F7; --card:#FFFFFF; --ink:#1C2430; --sub:#5B6472;
+    --line:#E3E7EC; --link:#1155CC; --deload:#FBEDD8;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    background:var(--bg); color:var(--ink); font-size:15px; line-height:1.45;
+    padding-bottom:calc(64px + env(safe-area-inset-bottom));
+  }
+  /* ---------- header ---------- */
+  header{
+    background:var(--navy); color:#fff; position:sticky; top:0; z-index:50;
+    padding:calc(10px + env(safe-area-inset-top)) 14px 0 14px;
+  }
+  header h1{font-size:16px; font-weight:700; letter-spacing:.02em}
+  header .sub{font-size:11.5px; color:#B9C2D4; margin:2px 0 8px}
+  .weekbar{display:flex; gap:5px; overflow-x:auto; padding-bottom:10px; scrollbar-width:none}
+  .weekbar::-webkit-scrollbar{display:none}
+  .wk{
+    flex:0 0 auto; min-width:44px; text-align:center; padding:6px 8px; border-radius:10px;
+    background:#2C3A5C; color:#C7D0E2; font-size:12px; font-weight:600; border:1.5px solid transparent;
+  }
+  .wk small{display:block; font-size:9px; font-weight:500; opacity:.75}
+  .wk.active{background:#fff; color:var(--navy); border-color:#fff}
+  .wk.deload{background:#7A5A2E; color:#FFE9C9}
+  .wk.deload.active{background:var(--deload); color:#7A4A12; border-color:var(--deload)}
+  .weeknote{
+    background:var(--slate); color:#DDE3EE; font-size:11.5px; padding:7px 14px;
+    position:sticky; z-index:49;
+  }
+  .weeknote b{color:#fff}
+  /* ---------- layout ---------- */
+  main{padding:12px 12px 24px}
+  .card{
+    background:var(--card); border:1px solid var(--line); border-radius:14px;
+    margin-bottom:10px; overflow:hidden;
+  }
+  .accent{height:4px}
+  .card .pad{padding:12px 13px}
+  .exname{font-size:15.5px; font-weight:700}
+  .exname a{color:var(--link); text-decoration:none; border-bottom:1.5px dotted var(--link)}
+  .muscle{font-size:11.5px; color:var(--sub); margin-top:1px}
+  .chips{display:flex; flex-wrap:wrap; gap:6px; margin-top:8px}
+  .chip{
+    background:#EEF1F5; border-radius:8px; padding:4px 9px; font-size:12px; font-weight:600;
+  }
+  .chip span{font-weight:500; color:var(--sub); font-size:10.5px; display:block; line-height:1.1}
+  .chip.rest{background:#FBEDE2; color:#8A4416}
+  .chip.rest:active{background:#F5D9C4}
+  .notes{
+    font-size:12.5px; color:#3D4654; margin-top:9px; background:#F7F8FA;
+    border-left:3px solid var(--line); padding:8px 10px; border-radius:0 8px 8px 0;
+    display:none;
+  }
+  .card.open .notes{display:block}
+  .notestoggle{font-size:11.5px; color:var(--link); font-weight:600; margin-top:8px; display:inline-block}
+  /* ---------- logging ---------- */
+  .logrow{display:flex; gap:7px; margin-top:10px}
+  .logrow input{
+    font-size:14px; padding:8px 10px; border:1.5px solid var(--line); border-radius:9px;
+    background:#FBFCFD; color:var(--ink); width:100%; font-family:inherit;
+  }
+  .logrow input:focus{outline:none; border-color:var(--blue); background:#fff}
+  .logrow .load{flex:1.1}
+  .logrow .set{flex:1.6}
+  .loglabel{font-size:10.5px; color:var(--sub); font-weight:600; margin-top:8px;
+    text-transform:uppercase; letter-spacing:.04em}
+  .prev{font-size:11px; color:#7A8494; margin-top:5px}
+  .prev b{color:#455063}
+  /* ---------- section headers / banners ---------- */
+  .banner{
+    color:#fff; border-radius:12px; padding:11px 13px; font-size:13px; font-weight:600;
+    margin-bottom:10px;
+  }
+  .banner small{display:block; font-weight:400; font-size:11.5px; opacity:.9; margin-top:2px}
+  .sect{font-size:12px; font-weight:700; color:var(--sub); text-transform:uppercase;
+    letter-spacing:.06em; margin:16px 2px 8px}
+  /* ---------- day picker ---------- */
+  .daypick{display:flex; gap:6px; margin-bottom:12px}
+  .daypick button{
+    flex:1; padding:9px 0 7px; border-radius:11px; border:1.5px solid var(--line);
+    background:#fff; font-family:inherit; font-size:13px; font-weight:700; color:var(--sub);
+  }
+  .daypick button small{display:block; font-size:9px; font-weight:600; letter-spacing:.02em}
+  .daypick button.on{color:#fff; border-color:transparent}
+  /* ---------- bottom nav ---------- */
+  nav{
+    position:fixed; bottom:0; left:0; right:0; z-index:60;
+    background:rgba(255,255,255,.96); backdrop-filter:blur(10px);
+    border-top:1px solid var(--line); display:flex;
+    padding-bottom:env(safe-area-inset-bottom);
+  }
+  nav button{
+    flex:1; background:none; border:none; font-family:inherit; padding:8px 0 6px;
+    font-size:10.5px; font-weight:600; color:#8B93A2;
+  }
+  nav button .ico{font-size:19px; display:block; line-height:1.25}
+  nav button.on{color:var(--navy)}
+  /* ---------- tables ---------- */
+  table{width:100%; border-collapse:collapse; font-size:12.5px}
+  th{background:var(--slate); color:#fff; text-align:left; padding:7px 8px; font-size:11px}
+  td{padding:8px; border-bottom:1px solid var(--line); vertical-align:top}
+  tr.dl td{background:var(--deload)}
+  tr.nowwk td{background:#EAF1EA}
+  /* ---------- timer ---------- */
+  #timer{
+    position:fixed; left:12px; right:12px; bottom:calc(70px + env(safe-area-inset-bottom));
+    background:var(--navy); color:#fff; border-radius:14px; padding:12px 16px; z-index:70;
+    display:none; align-items:center; gap:14px; box-shadow:0 6px 24px rgba(15,23,42,.35);
+  }
+  #timer.show{display:flex}
+  #timer .t{font-size:26px; font-weight:800; font-variant-numeric:tabular-nums; flex:1}
+  #timer button{
+    background:#3A4A70; color:#fff; border:none; border-radius:9px; padding:8px 13px;
+    font-family:inherit; font-size:13px; font-weight:700;
+  }
+  #timer.done{background:var(--green)}
+  .guide p{font-size:13px; margin-bottom:10px; color:#2A3341}
+  .guide b{color:var(--ink)}
+  .lib a{color:var(--link); text-decoration:none; font-weight:600}
+  .lib .cue{font-size:11.5px; color:var(--sub)}
+  .footer{font-size:10.5px; color:#98A0AE; text-align:center; margin-top:18px; line-height:1.6}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>LEIGHANN · 8-WEEK PROGRAM</h1>
+  <div class="sub">Carbon Performance · 5 days/wk · lifting + intervals</div>
+  <div class="weekbar" id="weekbar"></div>
+</header>
+<div class="weeknote" id="weeknote"></div>
+
+<main id="main"></main>
+
+<div id="timer">
+  <div class="t" id="timertxt">0:00</div>
+  <button onclick="Timer.add(15)">+15s</button>
+  <button onclick="Timer.stop()">✕</button>
+</div>
+
+<nav id="nav">
+  <button data-v="workout" class="on"><span class="ico">🏋️</span>Workout</button>
+  <button data-v="cardio"><span class="ico">🫀</span>Cardio</button>
+  <button data-v="guide"><span class="ico">📖</span>Guide</button>
+  <button data-v="library"><span class="ico">🎥</span>Machines</button>
+</nav>
+
+<script>
+/* ================= DATA ================= */
+const LINKS = {
+ "Linear Hack Squat":"https://www.ironcompany.com/arsenal-reloaded-linear-hack-squat-arsenal-ar-hs",
+ "Pendulum Squat":"https://www.ironcompany.com/arsenal-reloaded-pendulum-squat-arsenal-ar-pndlm",
+ "Leg Press":"https://www.ironcompany.com/arsenal-reloaded-power-squat-arsenal-ar-ps",
+ "Leg Extension":"https://www.ironcompany.com/arsenal-reloaded-leg-extension-seated-leg-curl-arsenal-ar-le-slc",
+ "Seated Leg Curl":"https://www.ironcompany.com/arsenal-reloaded-leg-extension-seated-leg-curl-arsenal-ar-le-slc",
+ "Lying Leg Curl":"https://www.ironcompany.com/forgex-lying-leg-curl-arsenal-8015",
+ "Seated Calf Raise":"https://www.ironcompany.com/arsenal-reloaded-seated-calf-raise-arsenal-ar-sc",
+ "Hip Thrust":"https://bootybuilder.com/product/booty-builder-selectorized-hip-thrust-machine/",
+ "Back Extension":"https://bootybuilder.com/product/booty-builder-selectorized-back-extension/",
+ "Standing Abductor":"https://bootybuilder.com/product/booty-builder-standing-abductor/",
+ "ISO Flat Chest Press":"https://www.ironcompany.com/arsenal-reloaded-iso-flat-press-arsenal-ar-fcp",
+ "ISO Incline Press":"https://www.ironcompany.com/arsenal-reloaded-iso-incline-press-arsenal-ar-icp",
+ "Vertical Chest Press":"https://www.ironcompany.com/arsenal-reloaded-vertical-chest-press-arsenal-ar-vcp",
+ "ISO Shoulder Press":"https://www.ironcompany.com/arsenal-reloaded-iso-conv-shoulder-press-arsenal-ar-sp",
+ "Viking Press":"https://www.ironcompany.com/arsenal-reloaded-viking-press-arsenal-ar-vp",
+ "ISO Lat Pulldown":"https://www.ironcompany.com/arsenal-reloaded-iso-lat-pulldown-arsenal-ar-ilp",
+ "Vertical Row":"https://www.ironcompany.com/arsenal-reloaded-vertical-row-arsenal-ar-vr",
+ "ISO Multi Row":"https://www.ironcompany.com/arsenal-reloaded-iso-multi-row-arsenal-ar-mr",
+ "Lever Row":"https://www.ironcompany.com/arsenal-reloaded-lever-row-arsenal-ar-lr",
+ "T-Bar Row":"https://www.ironcompany.com/arsenal-reloaded-t-bar-row-arsenal-ar-tbar",
+ "Glute Bridge":"https://www.ironcompany.com/arsenal-reloaded-glute-bridge-arsenal-ar-gbm",
+ "Belt Squat":"https://www.ironcompany.com/arsenal-reloaded-belt-squat-arsenal-ar-belt",
+ "Tutorials":"https://www.youtube.com/playlist?list=PLQPt_nA5RJZSdvXCvdIyurwMlD1WBx1lo"
+};
+
+const WEEKS = [
+ {n:1, tag:"Base",  cls:"", note:"<b>Week 1 — Baseline.</b> Find working weights, learn the machines. Last set ≈ 2–3 reps in the tank (RIR 2–3). Log your machine settings!"},
+ {n:2, tag:"Build", cls:"", note:"<b>Week 2 — Build.</b> Add the smallest jump on any lift where you hit the rep target. RIR 2."},
+ {n:3, tag:"Build", cls:"", note:"<b>Week 3 — Build.</b> +1 increment where you hit target reps. Missed reps? Repeat the weight — never trade tempo for load. RIR 1–2."},
+ {n:4, tag:"Hard",  cls:"", note:"<b>Week 4 — Overload.</b> +1 increment. Hardest week of Block 1 — sets should feel tough. RIR 1."},
+ {n:5, tag:"DELOAD",cls:"deload", note:"<b>Week 5 — DELOAD.</b> ~60% of Week-4 loads AND one set fewer per exercise. Cardio = easy Zone 2 only. RIR 4–5. This is where growth cashes in."},
+ {n:6, tag:"Rebuild",cls:"", note:"<b>Week 6 — Rebuild.</b> Return to ~Week 3–4 loads. Should feel strong and fresh. RIR 2."},
+ {n:7, tag:"Build", cls:"", note:"<b>Week 7 — Build.</b> +1 increment. RIR 1–2."},
+ {n:8, tag:"Peak",  cls:"", note:"<b>Week 8 — Peak.</b> +1 increment; leave nothing on the final sets. RIR 0–1. Then retest & rebuild with new variations."}
+];
+
+const DAYS = [
+ {id:"d1", short:"Lower A", label:"Quads", color:"var(--green)",
+  title:"Day 1 · Lower A — Quad-Dominant",
+  time:"60 min · ~40 lift + 20 cardio",
+  warm:"Warm-up (~5 min): easy bike/elliptical + leg swings, 10 bodyweight squats, then 1–2 light ramp sets on the Hack Squat.",
+  cardio:"20 min intervals after lifting — see Cardio tab.",
+  ex:[
+   {n:"Linear Hack Squat", link:"Linear Hack Squat", m:"Quads", s:"4×8", t:"3-1-1", r:150,
+    note:"Primary quad builder. Feet low & shoulder-width to bias quads. Control to just below parallel, brief pause, drive through mid-foot."},
+   {n:"Leg Press", link:"Leg Press", m:"Quads / Glutes", s:"3×10", t:"2-0-1", r:120,
+    note:"Lower foot placement = more quad. Knees toward chest to ~90°+ without the low back rounding. Don't slam lockout — keep tension."},
+   {n:"Leg Extension", link:"Leg Extension", m:"Quads (isolation)", s:"3×15", t:"2-1-2", r:75,
+    note:"Pause & squeeze 1s at the top, slow 2s negative. Teardrop/VMO builder. Light & high-rep — chase the burn, don't ego-load."},
+   {n:"Seated Leg Curl", link:"Seated Leg Curl", m:"Hamstrings", s:"3×12", t:"3-0-1", r:75,
+    note:"Balances the quad work, protects the knees. Toes to shin, control the eccentric, full squeeze."},
+   {n:"Standing Abductor", link:"Standing Abductor", m:"Glute medius", s:"3×20", t:"2-1-1", r:60,
+    note:"Slight forward hip lean, push the knee out & slightly back, pause at end range. Builds the upper-glute shelf."},
+   {n:"Abs: Hanging Leg Raise + Cable Crunch", link:null, m:"Abs / hip flexors", s:"3× (12+15)", t:"2-0-2", r:60,
+    note:"Superset, rest 60s between rounds. Curl the HIPS up (posterior pelvic tilt) — don't swing the legs. Add load on the crunch once 15 is easy."}
+  ]},
+ {id:"d2", short:"Upper A", label:"Push", color:"var(--blue)",
+  title:"Day 2 · Upper A — Push (compound)",
+  time:"60 min · ~40 lift + 20 cardio",
+  warm:"Warm-up (~5 min): arm circles, 20 band pull-aparts, then 1–2 light ramp sets on the Chest Press.",
+  cardio:"20 min intervals after lifting — see Cardio tab.",
+  ex:[
+   {n:"ISO Flat Chest Press", link:"ISO Flat Chest Press", m:"Chest / Shoulders / Tri", s:"4×8", t:"3-0-1", r:150,
+    note:"Handles at mid-chest. Elbows ≤45° flare, full stretch at the bottom before pressing. Primary press of the day."},
+   {n:"ISO Shoulder Press", link:"ISO Shoulder Press", m:"Shoulders / Tri", s:"3×10", t:"3-0-1", r:120,
+    note:"Ribs down, no low-back arch. Stop just short of lockout to keep the delts under tension."},
+   {n:"ISO Lat Pulldown", link:"ISO Lat Pulldown", m:"Lats / Upper back", s:"3×10", t:"3-1-1", r:120,
+    note:"Elbows DOWN toward hips, tall chest, squeeze the lats, controlled 3s return. Balances all the pressing."},
+   {n:"ISO Incline Press", link:"ISO Incline Press", m:"Upper chest", s:"3×10", t:"3-0-1", r:90,
+    note:"Upper-chest / front-delt tie-in. Same no-flare, full-stretch cues as the flat press."},
+   {n:"ISO Multi Row", link:"ISO Multi Row", m:"Mid-back / Lats", s:"3×12", t:"2-1-1", r:90,
+    note:"Chest supported. Elbows back, pinch the blades, control the return. Don't shrug."},
+   {n:"Abs: Weighted Plank + Pallof Press", link:null, m:"Deep core", s:"3× (30–45s + 12/side)", t:"—", r:45,
+    note:"Brace like you're about to be shoved; hips level. Pallof = slow, resist the rotation."}
+  ]},
+ {id:"d3", short:"Lower B", label:"Glutes", color:"var(--green)",
+  title:"Day 3 · Lower B — Glute / Hip-Dominant",
+  time:"60 min · ~40 lift + 20 cardio",
+  warm:"Warm-up (~5 min): easy StairMaster/bike, 15 bodyweight glute bridges, leg swings, then ramp sets on the Hip Thrust.",
+  cardio:"20 min intervals after lifting — see Cardio tab.",
+  ex:[
+   {n:"Hip Thrust (Booty Builder)", link:"Hip Thrust", m:"Glutes", s:"4×10", t:"2-1-1", r:150,
+    note:"Primary glute builder. Ribs down, chin tucked, drive to FULL lockout, 1s hard squeeze, control down. Push through the heels."},
+   {n:"Pendulum Squat", link:"Pendulum Squat", m:"Quads / Glutes", s:"3×10", t:"3-1-1", r:120,
+    note:"Deepest range you can control, heels down. Feet slightly higher/wider = more glute."},
+   {n:"Seated Leg Curl", link:"Seated Leg Curl", m:"Hamstrings", s:"3×12", t:"3-0-1", r:75,
+    note:"Hamstrings share hip extension with the glutes — they belong here. Full contraction, 3s eccentric."},
+   {n:"Back Extension (Booty Builder)", link:"Back Extension", m:"Glutes / Hams", s:"3×15", t:"2-1-2", r:75,
+    note:"Glute-style: chin tucked, slight spinal round, curl up leading with the glutes, squeeze at the top. Don't crank the low back."},
+   {n:"Standing Abductor", link:"Standing Abductor", m:"Glute medius", s:"3×20", t:"2-1-1", r:60,
+    note:"Pause at end range every rep. The glute med loves volume."},
+   {n:"Abs: Weighted Decline Sit-up + Side Plank", link:null, m:"Abs / obliques", s:"3× (12 + 30s/side)", t:"2-0-1", r:60,
+    note:"Control the way DOWN on the sit-up. Side plank: hips stacked, no sagging."}
+  ]},
+ {id:"d4", short:"Upper B", label:"Pull", color:"var(--blue)",
+  title:"Day 4 · Upper B — Pull (compound)",
+  time:"60 min · ~40 lift + 20 cardio",
+  warm:"Warm-up (~5 min): band pull-aparts, scap pull-ups or dead hangs, then 1–2 ramp sets on the first row.",
+  cardio:"20 min intervals after lifting — see Cardio tab.",
+  ex:[
+   {n:"Vertical Row", link:"Vertical Row", m:"Lats / Upper back", s:"4×8", t:"3-1-1", r:150,
+    note:"Lead with the elbows, full stretch at the top, zero torso swing. Heaviest pull of the day."},
+   {n:"Vertical Chest Press", link:"Vertical Chest Press", m:"Chest / Shoulders", s:"3×10", t:"3-0-1", r:120,
+    note:"Balances the pulling so the shoulders stay square. Full stretch, no over-flare."},
+   {n:"T-Bar Row", link:"T-Bar Row", m:"Mid-back / Lats", s:"3×10", t:"2-1-1", r:120,
+    note:"Chest on the pad if available. Elbows toward hips, pause & squeeze mid-back. Back thickness."},
+   {n:"Viking Press", link:"Viking Press", m:"Shoulders / Tri", s:"3×10", t:"3-0-1", r:90,
+    note:"Neutral grip = the most shoulder-friendly press. Just short of lockout, control down."},
+   {n:"Lever Row", link:"Lever Row", m:"Lats / Mid-back", s:"3×12", t:"2-1-1", r:90,
+    note:"Higher-rep back finisher. Squeeze and control every rep."},
+   {n:"Abs: Cable Crunch + Hanging Knee Raise", link:null, m:"Abs", s:"3× (15 + 12)", t:"2-0-2", r:45,
+    note:"Crunch = round the spine toward the pelvis, not a hip fold. Knee raises: curl the pelvis, control the lower."}
+  ]},
+ {id:"d5", short:"Lower C", label:"Long · Sat", color:"var(--purple)",
+  title:"Day 5 · Lower C — Full Lower (Long day)",
+  time:"~90 min · ~70–75 lift + ~15 easy cardio",
+  warm:"Warm-up (6–8 min): easy cardio, dynamic hips, 15 bodyweight squats, ramp sets on the Pendulum Squat. Highest-volume day — take the full warm-up.",
+  cardio:"~15 min easy Zone 2 after lifting (recovery, not a second workout).",
+  ex:[
+   {n:"Pendulum Squat", link:"Pendulum Squat", m:"Quads / Glutes", s:"4×8", t:"3-1-1", r:150,
+    note:"Big opener. Controlled depth, heels down. Swap with Hack Squat some weeks for variety."},
+   {n:"Leg Press", link:"Leg Press", m:"Quads / Glutes", s:"4×10", t:"2-0-1", r:120,
+    note:"Mid-platform foot position today — hits quads/glutes differently than Day 1."},
+   {n:"Hip Thrust (Booty Builder)", link:"Hip Thrust", m:"Glutes", s:"3×12", t:"2-1-1", r:120,
+    note:"Full lockout, 1s squeeze. Sub the Glute Bridge machine if it's taken."},
+   {n:"Lying Leg Curl", link:"Lying Leg Curl", m:"Hamstrings", s:"4×10", t:"3-0-1", r:90,
+    note:"Bank the extra hamstring volume here. Hips pinned, full ROM, no bouncing."},
+   {n:"Leg Extension", link:"Leg Extension", m:"Quads", s:"3×15", t:"2-1-2", r:75,
+    note:"Quad burn-out. Optional: last set = drop set (hit 15, drop ~30%, go to failure)."},
+   {n:"Standing Abductor", link:"Standing Abductor", m:"Glute medius", s:"3×20", t:"2-1-1", r:60,
+    note:"Pause at end range. Keep the tempo honest even when tired."},
+   {n:"Seated Calf Raise", link:"Seated Calf Raise", m:"Calves", s:"4×15", t:"2-2-1", r:60,
+    note:"Full stretch + 2s pause at the bottom, all the way up. Big range beats bouncy partials. (First to cut if pressed for time.)"},
+   {n:"Abs circuit: Leg Raise · Cable Crunch · Plank", link:null, m:"Abs (extended)", s:"3× (12 · 15 · 45s)", t:"—", r:60,
+    note:"All three back-to-back, rest 60s, ×3. Biggest ab day of the week."}
+  ]}
+];
+
+const CARDIO = [
+ {w:"1–2", name:"A · 1:1 Base", det:"45s hard / 45s easy ×10 rounds", rpe:"7", wks:[1,2]},
+ {w:"3–4", name:"B · 30:30 Sharpen", det:"30s hard (near limit) / 30s easy ×15 rounds", rpe:"8", wks:[3,4]},
+ {w:"5", name:"Z · Zone 2 Flush (DELOAD)", det:"No intervals — 18–20 min steady, nose-breathing pace", rpe:"4–5", wks:[5], dl:true},
+ {w:"6–7", name:"C · 2:1 Threshold", det:"2 min hard / 1 min easy ×5 rounds", rpe:"7–8", wks:[6,7]},
+ {w:"8", name:"D · Pyramid Peak", det:"30/45/60/45/30s hard, equal easy after each — pyramid ×2", rpe:"8–9", wks:[8]}
+];
+
+const MACHCUES = [
+ ["StairMaster","Hard: level up 3–5, drive tall, no leaning on rails.","Easy: drop the level, keep stepping."],
+ ["Rower","Hard: 28–32 spm, strong LEG drive.","Easy: 18–20 spm, light pressure."],
+ ["Bike","Hard: add resistance, 90–100 rpm (or stand).","Easy: low resistance, ~60 rpm."],
+ ["Treadmill","Hard: raise speed and/or 4–6% incline. Straddle the belt to rest.","Easy: walk / slow jog, 0–1%."],
+ ["Elliptical","Hard: raise resistance/incline, drive with the arms.","Easy: low resistance, light glide."]
+];
+
+const LIB = [
+ ["Linear Hack Squat","Quads","Feet low & shoulder-width; below parallel with control."],
+ ["Pendulum Squat","Quads/Glutes","Deep controlled arc, heels down; feet higher = more glute."],
+ ["Leg Press","Quads/Glutes","Low feet = quad; knees to 90°+ without hips lifting."],
+ ["Belt Squat","Quads/Glutes","Low-back-friendly squat alternative."],
+ ["Leg Extension","Quads","Pause at the top, slow negative, high-rep."],
+ ["Seated Leg Curl","Hamstrings","Toes to shin, full squeeze, 3s eccentric."],
+ ["Lying Leg Curl","Hamstrings","Hips pinned, full ROM, no bounce."],
+ ["Seated Calf Raise","Calves","Full stretch + pause at the bottom."],
+ ["Hip Thrust","Glutes","Ribs down, full lockout, 1s squeeze."],
+ ["Back Extension","Glutes/Hams","Chin tucked, curl up glute-first."],
+ ["Standing Abductor","Glute medius","Lean slightly forward, knee out & back, pause."],
+ ["Glute Bridge","Glutes","Hip-thrust alternative, same cues."],
+ ["ISO Flat Chest Press","Chest","Handles mid-chest, full stretch, no flare."],
+ ["ISO Incline Press","Upper chest","Controlled press, don't over-flare."],
+ ["Vertical Chest Press","Chest","Full stretch; balances pull days."],
+ ["ISO Shoulder Press","Shoulders","Ribs down; stop short of lockout."],
+ ["Viking Press","Shoulders","Neutral grip — shoulder-friendly."],
+ ["ISO Lat Pulldown","Lats","Elbows down to hips, tall chest."],
+ ["Vertical Row","Lats/Upper back","Lead with elbows, full stretch, no swing."],
+ ["ISO Multi Row","Mid-back","Chest supported; pinch the blades."],
+ ["Lever Row","Lats/Mid-back","Neutral grip, squeeze & control."],
+ ["T-Bar Row","Mid-back","Chest on pad; elbows to hips, pause."]
+];
+
+/* ================= STORAGE (localStorage w/ in-memory fallback) ================= */
+const Store = (()=>{
+  let mem = {};
+  let ok = false;
+  try { localStorage.setItem("__t","1"); localStorage.removeItem("__t"); ok = true; } catch(e){ ok = false; }
+  return {
+    get:k=>{ try{ return ok ? localStorage.getItem(k) : (mem[k] ?? null); }catch(e){ return mem[k] ?? null; } },
+    set:(k,v)=>{ try{ if(ok){ localStorage.setItem(k,v); } }catch(e){} mem[k]=v; },
+    persistent: ok
+  };
+})();
+
+/* ================= STATE ================= */
+let week = parseInt(Store.get("la.week") || "1", 10);
+let day  = Store.get("la.day") || "d1";
+let view = "workout";
+
+/* ================= TIMER ================= */
+const Timer = (()=>{
+  let left=0, iv=null;
+  const el=()=>document.getElementById("timer");
+  const txt=()=>document.getElementById("timertxt");
+  function render(){
+    const m=Math.floor(left/60), s=left%60;
+    txt().textContent = m+":"+String(s).padStart(2,"0");
+  }
+  function tick(){
+    left--;
+    if(left<=0){ left=0; clearInterval(iv); iv=null; el().classList.add("done");
+      txt().textContent="Rest done — go!";
+      try{ navigator.vibrate && navigator.vibrate([200,100,200]); }catch(e){}
+      setTimeout(()=>{ el().classList.remove("show","done"); }, 2500);
+      return;
+    }
+    render();
+  }
+  return {
+    start(sec){ left=sec; el().classList.remove("done"); el().classList.add("show"); render();
+      if(iv) clearInterval(iv); iv=setInterval(tick,1000); },
+    add(sec){ left+=sec; render(); },
+    stop(){ if(iv) clearInterval(iv); iv=null; el().classList.remove("show","done"); }
+  };
+})();
+
+/* ================= RENDER ================= */
+const $ = id=>document.getElementById(id);
+const esc = s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+
+function renderWeekbar(){
+  $("weekbar").innerHTML = WEEKS.map(w=>
+    `<div class="wk ${w.cls} ${w.n===week?'active':''}" onclick="setWeek(${w.n})">W${w.n}<small>${w.tag}</small></div>`
+  ).join("");
+  $("weeknote").innerHTML = WEEKS[week-1].note;
+}
+function setWeek(n){ week=n; Store.set("la.week",String(n)); renderWeekbar(); renderMain(); }
+function setDay(id){ day=id; Store.set("la.day",id); renderMain(); }
+function setView(v){
+  view=v;
+  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on", b.dataset.v===v));
+  renderMain();
+  window.scrollTo(0,0);
+}
+document.querySelectorAll("nav button").forEach(b=>b.addEventListener("click",()=>setView(b.dataset.v)));
+
+function keyFor(dId, exIdx, wk){ return `la.log.${dId}.${exIdx}.w${wk}`; }
+function setKeyFor(dId, exIdx){ return `la.set.${dId}.${exIdx}`; }
+
+function saveLog(dId, exIdx, val){ Store.set(keyFor(dId,exIdx,week), val); refreshPrev(dId, exIdx); }
+function saveSettings(dId, exIdx, val){ Store.set(setKeyFor(dId,exIdx), val); }
+
+function prevText(dId, exIdx){
+  const parts=[];
+  for(let w=1; w<=8; w++){
+    const v=Store.get(keyFor(dId,exIdx,w));
+    if(v && w!==week) parts.push(`W${w}: <b>${esc(v)}</b>`);
+  }
+  return parts.length ? "History — "+parts.join(" · ") : "";
+}
+function refreshPrev(dId, exIdx){
+  const el=document.getElementById(`prev-${dId}-${exIdx}`);
+  if(el) el.innerHTML = prevText(dId, exIdx);
+}
+
+function workoutHTML(){
+  const d = DAYS.find(x=>x.id===day);
+  const isDeload = week===5;
+  let h = `<div class="daypick">` + DAYS.map((x,ix)=>
+    `<button class="${x.id===day?'on':''}" style="${x.id===day?`background:${x.color}`:''}" onclick="setDay('${x.id}')">D${ix+1}<small>${x.label}</small></button>`
+  ).join("") + `</div>`;
+
+  h += `<div class="banner" style="background:${d.color}">${d.title}<small>${d.time}</small></div>`;
+  h += `<div class="card"><div class="pad" style="font-size:12.5px;color:var(--sub)">🔥 ${d.warm}</div></div>`;
+  if(isDeload) h += `<div class="card" style="background:var(--deload);border-color:#EED9B8"><div class="pad" style="font-size:12.5px;color:#7A4A12"><b>Deload week:</b> ~60% of Week-4 loads and drop one set per exercise. Easy does it — on purpose.</div></div>`;
+
+  d.ex.forEach((e,i)=>{
+    const link = e.link ? `<a href="${LINKS[e.link]}" target="_blank" rel="noopener">${esc(e.n)}</a>` : esc(e.n);
+    const logVal = Store.get(keyFor(d.id,i,week)) || "";
+    const setVal = Store.get(setKeyFor(d.id,i)) || "";
+    const sets = isDeload ? e.s.replace(/^(\d)/, m=>String(Math.max(1,parseInt(m)-1))) : e.s;
+    h += `
+    <div class="card" id="card-${d.id}-${i}">
+      <div class="accent" style="background:${d.color}"></div>
+      <div class="pad">
+        <div class="exname">${i+1}. ${link}</div>
+        <div class="muscle">${esc(e.m)}</div>
+        <div class="chips">
+          <div class="chip"><span>sets × reps</span>${sets}${isDeload&&sets!==e.s?' <small style="color:#B0691E">(deload)</small>':''}</div>
+          <div class="chip"><span>tempo</span>${e.t}</div>
+          <div class="chip rest" onclick="Timer.start(${e.r})"><span>rest — tap ⏱</span>${e.r>=120?(e.r/60)+" min":e.r+"s"}</div>
+        </div>
+        <span class="notestoggle" onclick="document.getElementById('card-${d.id}-${i}').classList.toggle('open')">Coaching notes ▾</span>
+        <div class="notes">${esc(e.note)}</div>
+        <div class="loglabel">Week ${week} log</div>
+        <div class="logrow">
+          <input class="load" inputmode="text" placeholder="e.g. 95×8" value="${esc(logVal)}"
+            onchange="saveLog('${d.id}',${i},this.value)">
+          <input class="set" placeholder="machine settings (seat 4 · feet low…)" value="${esc(setVal)}"
+            onchange="saveSettings('${d.id}',${i},this.value)">
+        </div>
+        <div class="prev" id="prev-${d.id}-${i}">${prevText(d.id,i)}</div>
+      </div>
+    </div>`;
+  });
+
+  h += `<div class="banner" style="background:var(--orange)">▶ ${d.cardio}</div>`;
+  if(!Store.persistent){
+    h += `<div class="footer">⚠️ This browser is blocking saved data — logs will reset when the page closes. Open the file in Safari (not a preview) for logging to stick.</div>`;
+  }
+  h += `<div class="footer">Tap an exercise name for machine media · tap the rest chip to start the timer<br>Logs save on this device only.</div>`;
+  return h;
+}
+
+function cardioHTML(){
+  let h = `<div class="banner" style="background:var(--orange)">Cardio Intervals — 20 min after lifting<small>You pick the machine, the program picks the intervals. 2 min easy warm-up → intervals → 1–2 min cool-down. Day 5 = ~15 min easy Zone 2 instead.</small></div>`;
+  h += `<div class="card"><table><tr><th>Wks</th><th>Protocol</th><th>RPE</th></tr>`;
+  CARDIO.forEach(c=>{
+    const now = c.wks.includes(week);
+    h += `<tr class="${c.dl?'dl':''} ${now?'nowwk':''}"><td>${c.w}${now?' ◀':''}</td><td><b>${c.name}</b><br>${c.det}</td><td>${c.rpe}</td></tr>`;
+  });
+  h += `</table></div>`;
+  h += `<div class="sect">RPE key</div><div class="card"><div class="pad" style="font-size:12.5px">
+    <b>3–4</b> easy — full conversation (recovery bits & warm-up)<br>
+    <b>5–6</b> Zone 2 — can talk in sentences (deload week)<br>
+    <b>7</b> hard — short phrases only<br>
+    <b>8–9</b> very hard — a word or two; you want the rest to arrive</div></div>`;
+  h += `<div class="sect">Machine cues — make "hard" actually hard</div>`;
+  MACHCUES.forEach(m=>{
+    h += `<div class="card"><div class="pad"><b>${m[0]}</b><div style="font-size:12.5px;margin-top:3px">${m[1]}<br><span style="color:var(--sub)">${m[2]}</span></div></div></div>`;
+  });
+  return h;
+}
+
+function guideHTML(){
+  return `<div class="banner" style="background:var(--gold)">The "why" — read once, revisit when tweaking</div>
+  <div class="card guide"><div class="pad">
+  <p><b>Volume is the dose.</b> Muscle grows on ~10–20 hard sets per muscle weekly — more isn't better past that, it just costs recovery. This program: quads ≈14–18, glutes ≈12–16, hams ≈9–12, abs ≈9–12.</p>
+  <p><b>Effort is the trigger.</b> The last ~5 reps before failure drive most growth — that's what RIR (reps in reserve) controls. Machines are the safest place to push close to failure.</p>
+  <p><b>Progressive overload is the engine.</b> Add the smallest increment whenever you hit the rep target with clean tempo & full range. Stall? Repeat the weight — normal, not failure.</p>
+  <p><b>Range of motion,</b> especially the deep stretch position, beats heavy half-reps for growth. Real depth, controlled stretch.</p>
+  <p><b>Recovery is where growth happens.</b> Protein ≈ 0.7–1 g/lb daily, 7–9 h sleep, and honor the Week-5 deload. Sharp joint pain = back off; muscle burn = the point.</p>
+  <p><b>Cardio goes after lifting</b> so it never steals strength, and drops to easy Zone 2 on the deload.</p>
+  <p><b>Order your week</b> so two lower days don't stack back-to-back. Ideal: L · U · L · U · L(long Sat). Running/solidcore slot on off-days or after easy days.</p>
+  <p><b>Reading the prescription:</b> Tempo 3-1-1 = 3s down · 1s pause · 1s up. Rest chips are tappable timers. Warm-up sets don't count toward the listed sets.</p>
+  </div></div>`;
+}
+
+function libraryHTML(){
+  let h = `<div class="banner" style="background:var(--navy)">Machine Library<small>Every machine → cue + tap for full media</small></div>`;
+  h += `<div class="card"><div class="pad lib"><a href="${LINKS["Tutorials"]}" target="_blank" rel="noopener">▶ Arsenal Strength video tutorials (YouTube)</a><div class="cue">Official how-to playlist — great first stop for any new machine.</div></div></div>`;
+  LIB.forEach(m=>{
+    const url = LINKS[m[0]];
+    h += `<div class="card"><div class="pad lib">${url?`<a href="${url}" target="_blank" rel="noopener">${m[0]}</a>`:`<b>${m[0]}</b>`} <span style="font-size:11px;color:var(--sub)">· ${m[1]}</span><div class="cue">${m[2]}</div></div></div>`;
+  });
+  return h;
+}
+
+function renderMain(){
+  const v = {workout:workoutHTML, cardio:cardioHTML, guide:guideHTML, library:libraryHTML}[view];
+  $("main").innerHTML = v();
+}
+
+renderWeekbar();
+renderMain();
+</script>
+</body>
+</html>
