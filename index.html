@@ -6,15 +6,19 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="LA Program">
-<meta name="theme-color" content="#1F2A44">
-<title>Leighann · 8-Week Program</title>
+<meta name="apple-mobile-web-app-title" content="L.A.B.L">
+<meta name="theme-color" content="#1C1C1C">
+<title>L.A.B.L · 8-Week Program</title>
 <style>
   :root{
-    --navy:#1F2A44; --slate:#33415C; --green:#1E7A5A; --blue:#2E5E8C;
-    --purple:#5B4B8A; --orange:#C8622A; --gold:#B8860B;
-    --bg:#F4F5F7; --card:#FFFFFF; --ink:#1C2430; --sub:#5B6472;
-    --line:#E3E7EC; --link:#1155CC; --deload:#FBEDD8;
+    --aqua:#D6FFFA; --pink:#F2E3EF; --gray:#CDCECA;
+    --bg:#1C1C1C; --surface:#242424; --surface2:#2E2E2E; --surface3:#383838;
+    --ink:#F2F2F0; --sub:#A6A8A4; --line:#333333; --dark:#111312;
+    /* legacy var mapping (JS references) */
+    --navy:var(--aqua); --slate:var(--surface2); --green:var(--aqua);
+    --blue:var(--pink); --purple:var(--aqua); --orange:var(--pink);
+    --gold:var(--aqua); --link:var(--aqua); --card:var(--surface);
+    --deload:#2A2226;
   }
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html{-webkit-text-size-adjust:100%}
@@ -25,124 +29,165 @@
   }
   /* ---------- header ---------- */
   header{
-    background:var(--navy); color:#fff; position:sticky; top:0; z-index:50;
-    padding:calc(10px + env(safe-area-inset-top)) 14px 0 14px;
+    background:linear-gradient(180deg,#232523 0%, var(--bg) 100%);
+    color:#fff; position:sticky; top:0; z-index:50;
+    padding:calc(14px + env(safe-area-inset-top)) 16px 0 16px;
   }
-  header h1{font-size:16px; font-weight:700; letter-spacing:.02em}
-  header .sub{font-size:11.5px; color:#B9C2D4; margin:2px 0 8px}
-  .weekbar{display:flex; gap:5px; overflow-x:auto; padding-bottom:10px; scrollbar-width:none}
+  header h1{font-size:26px; font-weight:800; letter-spacing:.06em; line-height:1.05}
+  header h1 i{color:var(--aqua); font-style:normal}
+  header .sub{font-size:11.5px; color:var(--sub); margin:3px 0 12px; letter-spacing:.02em}
+  .weekbar{display:flex; gap:6px; overflow-x:auto; padding-bottom:12px; scrollbar-width:none}
   .weekbar::-webkit-scrollbar{display:none}
   .wk{
-    flex:0 0 auto; min-width:44px; text-align:center; padding:6px 8px; border-radius:10px;
-    background:#2C3A5C; color:#C7D0E2; font-size:12px; font-weight:600; border:1.5px solid transparent;
+    flex:0 0 auto; min-width:46px; text-align:center; padding:7px 9px; border-radius:999px;
+    background:var(--surface2); color:var(--gray); font-size:12px; font-weight:700;
+    border:1.5px solid transparent; transition:background .15s,color .15s;
   }
-  .wk small{display:block; font-size:9px; font-weight:500; opacity:.75}
-  .wk.active{background:#fff; color:var(--navy); border-color:#fff}
-  .wk.deload{background:#7A5A2E; color:#FFE9C9}
-  .wk.deload.active{background:var(--deload); color:#7A4A12; border-color:var(--deload)}
+  .wk small{display:block; font-size:9px; font-weight:600; opacity:.7}
+  .wk.active{background:var(--aqua); color:var(--dark)}
+  .wk.active small{opacity:.85}
+  .wk.deload{background:#332B31; color:var(--pink)}
+  .wk.deload.active{background:var(--pink); color:var(--dark)}
   .weeknote{
-    background:var(--slate); color:#DDE3EE; font-size:11.5px; padding:7px 14px;
-    position:sticky; z-index:49;
+    background:var(--surface); color:var(--gray); font-size:11.5px; padding:8px 16px 8px 13px;
+    position:sticky; z-index:49; border-left:3px solid var(--aqua);
   }
   .weeknote b{color:#fff}
   /* ---------- layout ---------- */
-  main{padding:12px 12px 24px}
+  main{padding:14px 14px 26px}
   .card{
-    background:var(--card); border:1px solid var(--line); border-radius:14px;
-    margin-bottom:10px; overflow:hidden;
+    background:var(--surface); border:none; border-radius:16px;
+    margin-bottom:12px; overflow:hidden;
   }
-  .accent{height:4px}
-  .card .pad{padding:12px 13px}
-  .exname{font-size:15.5px; font-weight:700}
-  .exname a{color:var(--link); text-decoration:none; border-bottom:1.5px dotted var(--link)}
-  .muscle{font-size:11.5px; color:var(--sub); margin-top:1px}
-  .chips{display:flex; flex-wrap:wrap; gap:6px; margin-top:8px}
+  .accent{height:3px}
+  .card .pad{padding:14px 15px}
+  .exname{font-size:16px; font-weight:700; letter-spacing:.01em}
+  .exname a{color:var(--acc,var(--aqua)); text-decoration:none}
+  .exname a::after{content:" ▸"; font-size:12px; opacity:.7}
+  .muscle{font-size:11.5px; color:var(--sub); margin-top:2px}
+  .chips{display:flex; flex-wrap:wrap; gap:7px; margin-top:10px}
   .chip{
-    background:#EEF1F5; border-radius:8px; padding:4px 9px; font-size:12px; font-weight:600;
+    background:var(--surface2); border-radius:10px; padding:5px 11px; font-size:12.5px;
+    font-weight:700; color:var(--ink);
   }
-  .chip span{font-weight:500; color:var(--sub); font-size:10.5px; display:block; line-height:1.1}
-  .chip.rest{background:#FBEDE2; color:#8A4416}
-  .chip.rest:active{background:#F5D9C4}
+  .chip span{font-weight:600; color:var(--sub); font-size:10px; display:block; line-height:1.15;
+    text-transform:uppercase; letter-spacing:.05em}
+  .chip.rest{background:var(--acc-soft,rgba(214,255,250,.12)); color:var(--acc,var(--aqua))}
+  .chip.rest span{color:var(--acc-dim,rgba(214,255,250,.65))}
+  .chip.rest:active{background:var(--acc-soft,rgba(214,255,250,.25))}
   .notes{
-    font-size:12.5px; color:#3D4654; margin-top:9px; background:#F7F8FA;
-    border-left:3px solid var(--line); padding:8px 10px; border-radius:0 8px 8px 0;
+    font-size:12.5px; color:var(--gray); margin-top:10px; background:#202220;
+    border-left:3px solid var(--acc,var(--aqua)); padding:9px 11px; border-radius:0 10px 10px 0;
     display:none;
   }
   .card.open .notes{display:block}
-  .notestoggle{font-size:11.5px; color:var(--link); font-weight:600; margin-top:8px; display:inline-block}
+  .notestoggle{font-size:11.5px; color:var(--acc,var(--aqua)); font-weight:700; margin-top:9px; display:inline-block}
   /* ---------- logging ---------- */
-  .logrow{display:flex; gap:7px; margin-top:10px}
+  .logrow{display:flex; gap:8px; margin-top:11px}
   .logrow input{
-    font-size:14px; padding:8px 10px; border:1.5px solid var(--line); border-radius:9px;
-    background:#FBFCFD; color:var(--ink); width:100%; font-family:inherit;
+    font-size:14px; padding:9px 11px; border:1.5px solid var(--surface3); border-radius:10px;
+    background:var(--surface2); color:var(--ink); width:100%; font-family:inherit;
   }
-  .logrow input:focus{outline:none; border-color:var(--blue); background:#fff}
+  .logrow input::placeholder{color:#6E706C}
+  .logrow input:focus{outline:none; border-color:var(--acc,var(--aqua)); background:#333533}
   .logrow .load{flex:1.1}
   .logrow .set{flex:1.6}
-  .loglabel{font-size:10.5px; color:var(--sub); font-weight:600; margin-top:8px;
-    text-transform:uppercase; letter-spacing:.04em}
-  .prev{font-size:11px; color:#7A8494; margin-top:5px}
-  .prev b{color:#455063}
-  /* ---------- section headers / banners ---------- */
+  .loglabel{font-size:10.5px; color:var(--sub); font-weight:700; margin-top:10px;
+    text-transform:uppercase; letter-spacing:.07em}
+  .prev{font-size:11px; color:#82847F; margin-top:6px}
+  .prev b{color:var(--gray)}
+  /* ---------- banners ---------- */
   .banner{
-    color:#fff; border-radius:12px; padding:11px 13px; font-size:13px; font-weight:600;
-    margin-bottom:10px;
+    color:var(--dark); border-radius:14px; padding:13px 15px; font-size:14px; font-weight:800;
+    margin-bottom:12px; letter-spacing:.01em;
   }
-  .banner small{display:block; font-weight:400; font-size:11.5px; opacity:.9; margin-top:2px}
-  .sect{font-size:12px; font-weight:700; color:var(--sub); text-transform:uppercase;
-    letter-spacing:.06em; margin:16px 2px 8px}
+  .banner small{display:block; font-weight:600; font-size:11.5px; opacity:.75; margin-top:3px; line-height:1.4}
+  .sect{font-size:11px; font-weight:800; color:var(--sub); text-transform:uppercase;
+    letter-spacing:.09em; margin:18px 2px 9px}
   /* ---------- day picker ---------- */
-  .daypick{display:flex; gap:6px; margin-bottom:12px}
+  .daypick{display:flex; gap:6px; margin-bottom:13px}
   .daypick button{
-    flex:1; padding:9px 0 7px; border-radius:11px; border:1.5px solid var(--line);
-    background:#fff; font-family:inherit; font-size:13px; font-weight:700; color:var(--sub);
+    flex:1; padding:10px 0 8px; border-radius:12px; border:none;
+    background:var(--surface); font-family:inherit; font-size:13px; font-weight:800; color:var(--sub);
+    transition:background .15s,color .15s;
   }
-  .daypick button small{display:block; font-size:9px; font-weight:600; letter-spacing:.02em}
-  .daypick button.on{color:#fff; border-color:transparent}
+  .daypick button small{display:block; font-size:9px; font-weight:700; letter-spacing:.03em; opacity:.8}
+  .daypick button.on{color:var(--dark)}
   /* ---------- bottom nav ---------- */
   nav{
     position:fixed; bottom:0; left:0; right:0; z-index:60;
-    background:rgba(255,255,255,.96); backdrop-filter:blur(10px);
-    border-top:1px solid var(--line); display:flex;
+    background:rgba(24,25,24,.97); backdrop-filter:blur(14px);
+    border-top:1px solid #2A2A2A; display:flex;
     padding-bottom:env(safe-area-inset-bottom);
   }
   nav button{
-    flex:1; background:none; border:none; font-family:inherit; padding:8px 0 6px;
-    font-size:10.5px; font-weight:600; color:#8B93A2;
+    flex:1; background:none; border:none; font-family:inherit; padding:9px 0 7px;
+    font-size:10px; font-weight:700; color:#767873; letter-spacing:.03em;
   }
-  nav button .ico{font-size:19px; display:block; line-height:1.25}
-  nav button.on{color:var(--navy)}
+  nav button svg{display:block; margin:0 auto 3px; width:22px; height:22px; stroke:currentColor; fill:none;
+    stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round}
+  nav button.on{color:var(--aqua)}
   /* ---------- tables ---------- */
   table{width:100%; border-collapse:collapse; font-size:12.5px}
-  th{background:var(--slate); color:#fff; text-align:left; padding:7px 8px; font-size:11px}
-  td{padding:8px; border-bottom:1px solid var(--line); vertical-align:top}
-  tr.dl td{background:var(--deload)}
-  tr.nowwk td{background:#EAF1EA}
-  /* ---------- timer ---------- */
+  th{background:var(--surface2); color:var(--gray); text-align:left; padding:8px 9px; font-size:10.5px;
+    text-transform:uppercase; letter-spacing:.06em}
+  td{padding:9px; border-bottom:1px solid var(--line); vertical-align:top; color:var(--ink)}
+  tr.dl td{background:rgba(242,227,239,.07)}
+  tr.nowwk td{background:rgba(214,255,250,.08)}
+  /* ---------- rest timer widget ---------- */
   #timer{
-    position:fixed; left:12px; right:12px; bottom:calc(70px + env(safe-area-inset-bottom));
-    background:var(--navy); color:#fff; border-radius:14px; padding:12px 16px; z-index:70;
-    display:none; align-items:center; gap:14px; box-shadow:0 6px 24px rgba(15,23,42,.35);
+    position:fixed; left:14px; right:14px; bottom:calc(72px + env(safe-area-inset-bottom));
+    background:var(--surface2); color:#fff; border-radius:16px; padding:13px 17px; z-index:70;
+    display:none; align-items:center; gap:14px; box-shadow:0 8px 28px rgba(0,0,0,.55);
   }
   #timer.show{display:flex}
-  #timer .t{font-size:26px; font-weight:800; font-variant-numeric:tabular-nums; flex:1}
+  #timer .t{font-size:27px; font-weight:800; font-variant-numeric:tabular-nums; flex:1}
   #timer button{
-    background:#3A4A70; color:#fff; border:none; border-radius:9px; padding:8px 13px;
-    font-family:inherit; font-size:13px; font-weight:700;
+    background:var(--surface3); color:#fff; border:none; border-radius:10px; padding:9px 14px;
+    font-family:inherit; font-size:13px; font-weight:800;
   }
-  #timer.done{background:var(--green)}
-  .guide p{font-size:13px; margin-bottom:10px; color:#2A3341}
-  .guide b{color:var(--ink)}
-  .lib a{color:var(--link); text-decoration:none; font-weight:600}
-  .lib .cue{font-size:11.5px; color:var(--sub)}
-  .footer{font-size:10.5px; color:#98A0AE; text-align:center; margin-top:18px; line-height:1.6}
+  #timer.done{background:var(--aqua); color:var(--dark)}
+  #timer.done button{background:rgba(17,19,18,.15); color:var(--dark)}
+  /* ---------- interval timer ---------- */
+  .seg{display:flex; background:var(--surface2); border-radius:12px; padding:3px; gap:3px}
+  .seg button{flex:1; border:none; background:none; font-family:inherit; padding:9px 0;
+    border-radius:10px; font-size:13px; font-weight:800; color:var(--sub)}
+  .seg button.on{background:var(--aqua); color:var(--dark)}
+  .itfield{flex:1}
+  .itfield label{display:block; font-size:10px; font-weight:800; color:var(--sub);
+    text-transform:uppercase; letter-spacing:.06em; margin-bottom:5px}
+  .itfield input{width:100%; font-size:18px; font-weight:800; padding:11px; text-align:center;
+    border:1.5px solid var(--surface3); border-radius:12px; background:var(--surface2);
+    font-family:inherit; color:var(--ink)}
+  .itfield input:focus{outline:none; border-color:var(--aqua); background:#333533}
+  .presets{display:flex; gap:7px; flex-wrap:wrap; margin-top:10px}
+  .presets button{border:1.5px solid var(--surface3); background:var(--surface); border-radius:999px;
+    padding:8px 12px; font-family:inherit; font-size:11.5px; font-weight:800; color:var(--gray)}
+  .presets button:active{border-color:var(--aqua); color:var(--aqua)}
+  .bigbtn{width:100%; border:none; border-radius:999px; padding:16px 0; font-family:inherit;
+    font-size:16px; font-weight:800; color:var(--dark); margin-top:14px; letter-spacing:.02em}
+  #itdisplay{border-radius:20px; padding:30px 18px 22px; text-align:center; color:var(--dark);
+    transition:background .3s}
+  #itdisplay .phase{font-size:13px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; opacity:.75}
+  #itdisplay .clock{font-size:72px; font-weight:800; font-variant-numeric:tabular-nums; line-height:1.05}
+  #itdisplay .meta{font-size:13px; font-weight:700; opacity:.75; margin-top:5px}
+  #itdisplay .bar{height:6px; background:rgba(17,19,18,.18); border-radius:3px; margin-top:16px; overflow:hidden}
+  #itdisplay .bar div{height:100%; background:var(--dark); border-radius:3px; transition:width .5s linear}
+  .itbtns{display:flex; gap:8px; margin-top:14px}
+  .itbtns button{flex:1; border:none; border-radius:999px; padding:14px 0; font-family:inherit;
+    font-size:14px; font-weight:800; color:#fff}
+  .guide p{font-size:13px; margin-bottom:11px; color:var(--gray)}
+  .guide b{color:#fff}
+  .lib a{color:var(--aqua); text-decoration:none; font-weight:700}
+  .lib .cue{font-size:11.5px; color:var(--sub); margin-top:1px}
+  .footer{font-size:10.5px; color:#6E706C; text-align:center; margin-top:20px; line-height:1.65}
 </style>
 </head>
 <body>
 
 <header>
-  <h1>LEIGHANN · 8-WEEK PROGRAM</h1>
-  <div class="sub">Carbon Performance · 5 days/wk · lifting + intervals</div>
+  <h1>L<i>.</i>A<i>.</i>B<i>.</i>L</h1>
+  <div class="sub">8-WEEK STRENGTH + CARDIO&nbsp;&nbsp;·&nbsp;&nbsp;CARBON PERFORMANCE</div>
   <div class="weekbar" id="weekbar"></div>
 </header>
 <div class="weeknote" id="weeknote"></div>
@@ -156,38 +201,62 @@
 </div>
 
 <nav id="nav">
-  <button data-v="workout" class="on"><span class="ico">🏋️</span>Workout</button>
-  <button data-v="cardio"><span class="ico">🫀</span>Cardio</button>
-  <button data-v="guide"><span class="ico">📖</span>Guide</button>
-  <button data-v="library"><span class="ico">🎥</span>Machines</button>
+  <button data-v="workout" class="on"><svg viewBox="0 0 24 24"><path d="M2 12h2M20 12h2M6 12h12"/><rect x="4" y="7" width="3" height="10" rx="1"/><rect x="17" y="7" width="3" height="10" rx="1"/></svg>Workout</button>
+  <button data-v="cardio"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.5-9-9c-1.2-2.8.6-6 3.8-6C9 5 10.8 6.6 12 8.2 13.2 6.6 15 5 17.2 5c3.2 0 5 3.2 3.8 6-2 4.5-9 9-9 9z"/><path d="M5 12h4l1.5-3 2 6 1.5-3h4"/></svg>Cardio</button>
+  <button data-v="itimer"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 13V9M10 2h4M12 2v3"/></svg>Timer</button>
+  <button data-v="guide"><svg viewBox="0 0 24 24"><path d="M12 6c-2-1.5-5-2-8-2v14c3 0 6 .5 8 2 2-1.5 5-2 8-2V4c-3 0-6 .5-8 2z"/><path d="M12 6v14"/></svg>Guide</button>
+  <button data-v="library"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5.5 3.5-5.5 3.5z"/></svg>Videos</button>
 </nav>
 
 <script>
 /* ================= DATA ================= */
 const LINKS = {
- "Linear Hack Squat":"https://www.ironcompany.com/arsenal-reloaded-linear-hack-squat-arsenal-ar-hs",
- "Pendulum Squat":"https://www.ironcompany.com/arsenal-reloaded-pendulum-squat-arsenal-ar-pndlm",
- "Leg Press":"https://www.ironcompany.com/arsenal-reloaded-power-squat-arsenal-ar-ps",
- "Leg Extension":"https://www.ironcompany.com/arsenal-reloaded-leg-extension-seated-leg-curl-arsenal-ar-le-slc",
- "Seated Leg Curl":"https://www.ironcompany.com/arsenal-reloaded-leg-extension-seated-leg-curl-arsenal-ar-le-slc",
- "Lying Leg Curl":"https://www.ironcompany.com/forgex-lying-leg-curl-arsenal-8015",
- "Seated Calf Raise":"https://www.ironcompany.com/arsenal-reloaded-seated-calf-raise-arsenal-ar-sc",
- "Hip Thrust":"https://bootybuilder.com/product/booty-builder-selectorized-hip-thrust-machine/",
- "Back Extension":"https://bootybuilder.com/product/booty-builder-selectorized-back-extension/",
- "Standing Abductor":"https://bootybuilder.com/product/booty-builder-standing-abductor/",
- "ISO Flat Chest Press":"https://www.ironcompany.com/arsenal-reloaded-iso-flat-press-arsenal-ar-fcp",
- "ISO Incline Press":"https://www.ironcompany.com/arsenal-reloaded-iso-incline-press-arsenal-ar-icp",
- "Vertical Chest Press":"https://www.ironcompany.com/arsenal-reloaded-vertical-chest-press-arsenal-ar-vcp",
- "ISO Shoulder Press":"https://www.ironcompany.com/arsenal-reloaded-iso-conv-shoulder-press-arsenal-ar-sp",
- "Viking Press":"https://www.ironcompany.com/arsenal-reloaded-viking-press-arsenal-ar-vp",
- "ISO Lat Pulldown":"https://www.ironcompany.com/arsenal-reloaded-iso-lat-pulldown-arsenal-ar-ilp",
- "Vertical Row":"https://www.ironcompany.com/arsenal-reloaded-vertical-row-arsenal-ar-vr",
- "ISO Multi Row":"https://www.ironcompany.com/arsenal-reloaded-iso-multi-row-arsenal-ar-mr",
- "Lever Row":"https://www.ironcompany.com/arsenal-reloaded-lever-row-arsenal-ar-lr",
- "T-Bar Row":"https://www.ironcompany.com/arsenal-reloaded-t-bar-row-arsenal-ar-tbar",
- "Glute Bridge":"https://www.ironcompany.com/arsenal-reloaded-glute-bridge-arsenal-ar-gbm",
- "Belt Squat":"https://www.ironcompany.com/arsenal-reloaded-belt-squat-arsenal-ar-belt",
- "Tutorials":"https://www.youtube.com/playlist?list=PLQPt_nA5RJZSdvXCvdIyurwMlD1WBx1lo"
+ "Linear Hack Squat":"https://www.youtube.com/watch?v=fE5BWPy7uRc",
+ "Pendulum Squat":"https://www.youtube.com/watch?v=QCLWnLNM35U",
+ "Leg Press":"https://www.youtube.com/watch?v=K5n2vg3oZa4",
+ "Leg Extension":"https://www.youtube.com/watch?v=tTbJBUKnWU8",
+ "Seated Leg Curl":"https://www.youtube.com/watch?v=Wy1SwoY2aaQ",
+ "Lying Leg Curl":"https://www.youtube.com/watch?v=vl5nUdE9mWM",
+ "Seated Calf Raise":"https://www.youtube.com/watch?v=I1uQtobaNRQ",
+ "Hip Thrust":"https://www.youtube.com/watch?v=wcJpAwLBniI",
+ "Back Extension":"https://www.youtube.com/watch?v=wt4oerFea2s",
+ "Standing Abductor":"https://www.youtube.com/watch?v=d_blgROsAik",
+ "ISO Flat Chest Press":"https://www.youtube.com/watch?v=rY0B8UFdne0",
+ "ISO Incline Press":"https://www.youtube.com/watch?v=Fpa5DI3lIqg",
+ "Vertical Chest Press":"https://www.youtube.com/watch?v=zgP-UCKGe24",
+ "ISO Shoulder Press":"https://www.youtube.com/watch?v=3R14MnZbcpw",
+ "Viking Press":"https://www.youtube.com/watch?v=11cdAXyFhl4",
+ "ISO Lat Pulldown":"https://www.youtube.com/watch?v=4Z88Yyc6ItI",
+ "Vertical Row":"https://www.youtube.com/watch?v=2E6psSHltl4",
+ "ISO Multi Row":"https://www.youtube.com/watch?v=3-5tsSTlzgE",
+ "Lever Row":"https://www.youtube.com/watch?v=rRtFgdPPoAM",
+ "T-Bar Row":"https://www.youtube.com/shorts/Mlr-Lx-10HQ",
+ "Glute Bridge":"https://www.youtube.com/watch?v=WobMJQ4v5k4",
+ "Belt Squat":"https://www.youtube.com/watch?v=ZuNAnNLIpVQ",
+ "Hanging Leg Raise":"https://www.youtube.com/watch?v=vwl68EF9M2Q",
+ "Cable Crunch":"https://www.youtube.com/watch?v=AV5PmZJIrrw",
+ "Pallof Press":"https://www.youtube.com/watch?v=xeFp4MXad98",
+ "BB Overhead Press":"https://www.youtube.com/watch?v=GlyABLsPk-Q",
+ "DB Shoulder Press":"https://www.youtube.com/watch?v=fuQpuu--bMI",
+ "BB Push Press":"https://www.youtube.com/watch?v=a8HQo8z20Uo",
+ "Arnold Press":"https://www.youtube.com/watch?v=6Z15_WdXmVw",
+ "GHD Sit-up":"https://www.youtube.com/watch?v=z3iXCn9KB1I",
+ "GHD Twist":"https://www.youtube.com/watch?v=3Xp-KnQt218",
+ "Cable Trunk Rotation":"https://www.youtube.com/watch?v=61ara6KJdrU",
+ "Kipping K2E":"https://www.youtube.com/watch?v=_HIizWgkQUM",
+ "Landmine Press":"https://www.youtube.com/watch?v=BQE4_5yTVf8",
+ "Banded Pull-up":"https://www.youtube.com/watch?v=4yE-XGDWJPg",
+ "Seated Cable Row":"https://www.youtube.com/watch?v=EU7bOadUsNI",
+ "Lat Pulldown":"https://www.youtube.com/watch?v=CAwf7n6Luuc",
+ "BB RDL":"https://www.youtube.com/watch?v=xgusDooVfKU",
+ "BB Deadlift":"https://www.youtube.com/watch?v=NVpwlMFrB3I",
+ "BB Walking Lunge":"https://www.youtube.com/watch?v=BenhAbJiTsw",
+ "BB Reverse Lunge":"https://www.youtube.com/watch?v=KaqP9lf6B_U",
+ "DB Clean & Press":"https://www.youtube.com/watch?v=2YedyLmkDRE",
+ "Incline BB Push-up":"https://www.youtube.com/shorts/CQ7hAMHgq-Q",
+ "DB Step-up":"https://www.youtube.com/watch?v=aKj-6hgiViA",
+ "Tutorials":"https://www.youtube.com/playlist?list=PLQPt_nA5RJZSdvXCvdIyurwMlD1WBx1lo",
+ "BB Tutorials":"https://www.youtube.com/playlist?list=PLWPdd5JiYYwCgeBPq0ZOV25IXc8_4Sw29"
 };
 
 const WEEKS = [
@@ -214,69 +283,65 @@ const DAYS = [
     note:"Lower foot placement = more quad. Knees toward chest to ~90°+ without the low back rounding. Don't slam lockout — keep tension."},
    {n:"Leg Extension", link:"Leg Extension", m:"Quads (isolation)", s:"3×15", t:"2-1-2", r:75,
     note:"Pause & squeeze 1s at the top, slow 2s negative. Teardrop/VMO builder. Light & high-rep — chase the burn, don't ego-load."},
-   {n:"Seated Leg Curl", link:"Seated Leg Curl", m:"Hamstrings", s:"3×12", t:"3-0-1", r:75,
-    note:"Balances the quad work, protects the knees. Toes to shin, control the eccentric, full squeeze."},
+   {n:"Prone Leg Curl", link:"Lying Leg Curl", m:"Hamstrings", s:"3×12", t:"3-0-1", r:75,
+    note:"Face-down on the pad, hips PINNED the whole set. Balances the quad work, protects the knees. Full squeeze at the top, 3s controlled lower, no bouncing."},
    {n:"Standing Abductor", link:"Standing Abductor", m:"Glute medius", s:"3×20", t:"2-1-1", r:60,
     note:"Slight forward hip lean, push the knee out & slightly back, pause at end range. Builds the upper-glute shelf."},
-   {n:"Abs: Hanging Leg Raise + Cable Crunch", link:null, m:"Abs / hip flexors", s:"3× (12+15)", t:"2-0-2", r:60,
-    note:"Superset, rest 60s between rounds. Curl the HIPS up (posterior pelvic tilt) — don't swing the legs. Add load on the crunch once 15 is easy."}
+   {n:"Abs: GHD Sit-ups + GHD Trunk Twists", link:"GHD Sit-up", m:"Abs / obliques", s:"3× (10 + 10/side)", t:"2-0-1", r:60,
+    note:"Superset on the GHD, rest 60s between rounds. Sit-ups: start with MODEST range (torso to parallel) and bodyweight — GHD sit-ups bite harder than they look; add range, then a plate, over the weeks. Twists: arms out, rotate under control. Twist video is in the Videos tab."}
   ]},
- {id:"d2", short:"Upper A", label:"Push", color:"var(--blue)",
-  title:"Day 2 · Upper A — Push (compound)",
+ {id:"d2", short:"Upper A", label:"Push+Pull", color:"var(--blue)",
+  title:"Day 2 · Upper A — Push & Pull (free weights)",
   time:"60 min · ~40 lift + 20 cardio",
-  warm:"Warm-up (~5 min): arm circles, 20 band pull-aparts, then 1–2 light ramp sets on the Chest Press.",
+  warm:"Warm-up (~5 min): arm circles, 20 band pull-aparts, shoulder dislocates, then 1–2 empty-bar ramp sets on the Push Press.",
   cardio:"20 min intervals after lifting — see Cardio tab.",
   ex:[
-   {n:"ISO Flat Chest Press", link:"ISO Flat Chest Press", m:"Chest / Shoulders / Tri", s:"4×8", t:"3-0-1", r:150,
-    note:"Handles at mid-chest. Elbows ≤45° flare, full stretch at the bottom before pressing. Primary press of the day."},
-   {n:"ISO Shoulder Press", link:"ISO Shoulder Press", m:"Shoulders / Tri", s:"3×10", t:"3-0-1", r:120,
-    note:"Ribs down, no low-back arch. Stop just short of lockout to keep the delts under tension."},
-   {n:"ISO Lat Pulldown", link:"ISO Lat Pulldown", m:"Lats / Upper back", s:"3×10", t:"3-1-1", r:120,
-    note:"Elbows DOWN toward hips, tall chest, squeeze the lats, controlled 3s return. Balances all the pressing."},
-   {n:"ISO Incline Press", link:"ISO Incline Press", m:"Upper chest", s:"3×10", t:"3-0-1", r:90,
-    note:"Upper-chest / front-delt tie-in. Same no-flare, full-stretch cues as the flat press."},
-   {n:"ISO Multi Row", link:"ISO Multi Row", m:"Mid-back / Lats", s:"3×12", t:"2-1-1", r:90,
-    note:"Chest supported. Elbows back, pinch the blades, control the return. Don't shrug."},
-   {n:"Abs: Weighted Plank + Pallof Press", link:null, m:"Deep core", s:"3× (30–45s + 12/side)", t:"—", r:45,
-    note:"Brace like you're about to be shoved; hips level. Pallof = slow, resist the rotation."}
+   {n:"BB Push Press", link:"BB Push Press", m:"Shoulders / Tri / Full body", s:"4×8", t:"3-0-X", r:150,
+    note:"Primary press. Small knee dip, then DRIVE through the legs and punch the bar overhead — the leg drive lets you overload beyond a strict press. Lower under control (3s). ALTERNATE weeks with the Seated DB Arnold Press (4×10, rotate palms from facing you to facing forward) — its video is in the Videos tab. Log whichever you did."},
+   {n:"Tall-Kneeling Landmine Press", link:"Landmine Press", m:"Shoulders / Upper chest / Core", s:"3×10/side", t:"2-0-1", r:90,
+    note:"Both knees down, glutes squeezed — the tall-kneeling position forces the core to do the stabilizing. Press the bar up-and-forward along its arc. (Half-kneeling or standing are fine variations.)"},
+   {n:"Banded Pull-ups", link:"Banded Pull-up", m:"Lats / Upper back", s:"3×6–10", t:"3-1-1", r:120,
+    note:"Band on the bar, knee or foot in. Full dead-hang stretch, chest to the bar, 3s controlled lower. Thinner band over time = built-in progression. (Lat pulldowns live on Day 4 — a different vertical pull each upper day.)"},
+   {n:"Seated Cable Row", link:"Seated Cable Row", m:"Mid-back / Lats", s:"3×10", t:"2-1-1", r:90,
+    note:"Tall chest, drive the elbows back, pause and pinch the blades, control the return. No torso rocking — small lean is fine, momentum isn't."},
+   {n:"Abs: Kipping Knees-to-Elbows (K2E) — wave loading", link:"Kipping K2E", m:"Abs / lats / grip", s:"2×(10-8-6)", t:"—", r:90,
+    note:"WAVE LOADING: one set = a descending wave with just 10s between drops — 10 reps · rest 10s · 8 reps · rest 10s · 6 reps. Do 2 waves total, ~90s between waves. Build the wave over the program: Wk1–2 = 10-8-6, Wk3–4 = 11-9-7, Wk5 deload = one easy wave, Wk6 = 12-10-8, Wk7 = 13-11-9, Wk8 = 14-12-10. Rhythmic kip (hollow → arch), knees UP to the elbows — let the kip do the lifting. Scale: knees to chest until the swing is smooth."}
   ]},
  {id:"d3", short:"Lower B", label:"Glutes", color:"var(--green)",
-  title:"Day 3 · Lower B — Glute / Hip-Dominant",
+  title:"Day 3 · Lower B — Glute / Hip-Dominant (free weights)",
   time:"60 min · ~40 lift + 20 cardio",
-  warm:"Warm-up (~5 min): easy StairMaster/bike, 15 bodyweight glute bridges, leg swings, then ramp sets on the Hip Thrust.",
+  warm:"Warm-up (~5 min): easy StairMaster/bike, 15 bodyweight glute bridges, leg swings, then ramp sets on the Hip Thrust and an empty-bar RDL set.",
   cardio:"20 min intervals after lifting — see Cardio tab.",
   ex:[
    {n:"Hip Thrust (Booty Builder)", link:"Hip Thrust", m:"Glutes", s:"4×10", t:"2-1-1", r:150,
     note:"Primary glute builder. Ribs down, chin tucked, drive to FULL lockout, 1s hard squeeze, control down. Push through the heels."},
-   {n:"Pendulum Squat", link:"Pendulum Squat", m:"Quads / Glutes", s:"3×10", t:"3-1-1", r:120,
-    note:"Deepest range you can control, heels down. Feet slightly higher/wider = more glute."},
-   {n:"Seated Leg Curl", link:"Seated Leg Curl", m:"Hamstrings", s:"3×12", t:"3-0-1", r:75,
-    note:"Hamstrings share hip extension with the glutes — they belong here. Full contraction, 3s eccentric."},
-   {n:"Back Extension (Booty Builder)", link:"Back Extension", m:"Glutes / Hams", s:"3×15", t:"2-1-2", r:75,
-    note:"Glute-style: chin tucked, slight spinal round, curl up leading with the glutes, squeeze at the top. Don't crank the low back."},
-   {n:"Standing Abductor", link:"Standing Abductor", m:"Glute medius", s:"3×20", t:"2-1-1", r:60,
-    note:"Pause at end range every rep. The glute med loves volume."},
+   {n:"BB Romanian Deadlift", link:"BB RDL", m:"Hamstrings / Glutes", s:"3×10", t:"3-1-1", r:120,
+    note:"Soft knees, push the HIPS back, bar drags close to the legs, stop when the hamstrings scream (mid-shin-ish), squeeze the glutes to stand. This replaces the seated leg curl here — same hamstrings, more glute. Variety option: swap in conventional BB Deadlifts (3×8, heavier) any week — video for those is in the Machines tab."},
+   {n:"BB Lunges (alt: forward / reverse)", link:"BB Walking Lunge", m:"Glutes / Quads", s:"3×8/leg", t:"2-0-1", r:90,
+    note:"ALTERNATE week to week: forward/walking lunges one week, REVERSE lunges the next (reverse = knee-friendlier and a touch more glute — video in the Videos tab). Long-ish stride, torso slightly forward, back knee kisses the floor. Wk6–8 progression: add a 2–4\" deficit under the front foot."},
+   {n:"DB Step-ups to Plyo Box", link:"DB Step-up", m:"Glutes / Quads", s:"3×8/leg", t:"2-0-X", r:90,
+    note:"Knee-height box. Whole foot on the box, lean slightly into the working leg, drive up WITHOUT pushing off the floor leg — then lower under control (2s). All reps one side, then switch."},
+   {n:"Back Extension (Booty Builder)", link:"Back Extension", m:"Glutes / Hams", s:"3×12", t:"2-1-2", r:75,
+    note:"Glute-style finisher: chin tucked, slight spinal round, curl up leading with the glutes, squeeze at the top. Don't crank the low back. Hold a plate at the chest once 12 is easy."},
    {n:"Abs: Weighted Decline Sit-up + Side Plank", link:null, m:"Abs / obliques", s:"3× (12 + 30s/side)", t:"2-0-1", r:60,
     note:"Control the way DOWN on the sit-up. Side plank: hips stacked, no sagging."}
   ]},
- {id:"d4", short:"Upper B", label:"Pull", color:"var(--blue)",
-  title:"Day 4 · Upper B — Pull (compound)",
+ {id:"d4", short:"Upper B", label:"Push+Pull", color:"var(--blue)",
+  title:"Day 4 · Upper B — Push & Pull (explosive + bodyweight)",
   time:"60 min · ~40 lift + 20 cardio",
-  warm:"Warm-up (~5 min): band pull-aparts, scap pull-ups or dead hangs, then 1–2 ramp sets on the first row.",
+  warm:"Warm-up (~5 min): band pull-aparts, scap pulls or dead hangs, arm circles, then 1–2 light ramp sets of the DB clean & press.",
   cardio:"20 min intervals after lifting — see Cardio tab.",
   ex:[
-   {n:"Vertical Row", link:"Vertical Row", m:"Lats / Upper back", s:"4×8", t:"3-1-1", r:150,
-    note:"Lead with the elbows, full stretch at the top, zero torso swing. Heaviest pull of the day."},
-   {n:"Vertical Chest Press", link:"Vertical Chest Press", m:"Chest / Shoulders", s:"3×10", t:"3-0-1", r:120,
-    note:"Balances the pulling so the shoulders stay square. Full stretch, no over-flare."},
-   {n:"T-Bar Row", link:"T-Bar Row", m:"Mid-back / Lats", s:"3×10", t:"2-1-1", r:120,
-    note:"Chest on the pad if available. Elbows toward hips, pause & squeeze mid-back. Back thickness."},
-   {n:"Viking Press", link:"Viking Press", m:"Shoulders / Tri", s:"3×10", t:"3-0-1", r:90,
-    note:"Neutral grip = the most shoulder-friendly press. Just short of lockout, control down."},
-   {n:"Lever Row", link:"Lever Row", m:"Lats / Mid-back", s:"3×12", t:"2-1-1", r:90,
-    note:"Higher-rep back finisher. Squeeze and control every rep."},
-   {n:"Abs: Cable Crunch + Hanging Knee Raise", link:null, m:"Abs", s:"3× (15 + 12)", t:"2-0-2", r:45,
-    note:"Crunch = round the spine toward the pelvis, not a hip fold. Knee raises: curl the pelvis, control the lower."}
+   {n:"DB Hang Power Clean to Push Press", link:"DB Clean & Press", m:"Full body / Shoulders", s:"4×6", t:"X", r:120,
+    note:"DBs at the thighs (hang), POP the hips to bring them to the shoulders, then leg-drive press overhead. This is a power move — every rep crisp and fast; end the set when the speed dies, don't grind. Moderate DBs, perfect positions."},
+   {n:"Lat Pulldown (or Pull-ups)", link:"Lat Pulldown", m:"Lats / Upper back", s:"3×12", t:"3-1-1", r:120,
+    note:"Pulldowns are the default here since banded pull-ups live on Day 2 — a different vertical pull each upper day. Elbows DOWN to the hips, slight lean back, bar to the collarbone, 3s return. Feeling strong? Swap in pull-ups any week."},
+   {n:"Incline BB Push-up (in Squat Rack)", link:"Incline BB Push-up", m:"Chest / Tri / Core", s:"3×10–15", t:"3-0-1", r:90,
+    note:"Bar racked around waist height, hands on the bar, body one rigid plank — chest to the bar, full lockout. Built-in progression: move the bar ONE PIN LOWER when 15 gets easy; harder still = feet elevated. Squeeze the glutes so the hips never sag."},
+   {n:"Vertical Row", link:"Vertical Row", m:"Lats / Upper back", s:"3×10", t:"3-1-1", r:90,
+    note:"The one machine row of the day (cable row lives on Day 2). Lead with the elbows, full stretch at the top, zero torso swing."},
+   {n:"Abs: Standing Cable Trunk Rotations", link:"Cable Trunk Rotation", m:"Obliques / deep core", s:"4×12/side", t:"2-0-1", r:45,
+    note:"Cable at chest height, arms long, rotate the TORSO — hips stay mostly square, don't just swing the arms. Controlled back to center every rep. Four working sets since it's the only core move today."}
   ]},
  {id:"d5", short:"Lower C", label:"Long · Sat", color:"var(--purple)",
   title:"Day 5 · Lower C — Full Lower (Long day)",
@@ -290,7 +355,7 @@ const DAYS = [
     note:"Mid-platform foot position today — hits quads/glutes differently than Day 1."},
    {n:"Hip Thrust (Booty Builder)", link:"Hip Thrust", m:"Glutes", s:"3×12", t:"2-1-1", r:120,
     note:"Full lockout, 1s squeeze. Sub the Glute Bridge machine if it's taken."},
-   {n:"Lying Leg Curl", link:"Lying Leg Curl", m:"Hamstrings", s:"4×10", t:"3-0-1", r:90,
+   {n:"Prone Leg Curl", link:"Lying Leg Curl", m:"Hamstrings", s:"4×10", t:"3-0-1", r:90,
     note:"Bank the extra hamstring volume here. Hips pinned, full ROM, no bouncing."},
    {n:"Leg Extension", link:"Leg Extension", m:"Quads", s:"3×15", t:"2-1-2", r:75,
     note:"Quad burn-out. Optional: last set = drop set (hit 15, drop ~30%, go to failure)."},
@@ -298,8 +363,8 @@ const DAYS = [
     note:"Pause at end range. Keep the tempo honest even when tired."},
    {n:"Seated Calf Raise", link:"Seated Calf Raise", m:"Calves", s:"4×15", t:"2-2-1", r:60,
     note:"Full stretch + 2s pause at the bottom, all the way up. Big range beats bouncy partials. (First to cut if pressed for time.)"},
-   {n:"Abs circuit: Leg Raise · Cable Crunch · Plank", link:null, m:"Abs (extended)", s:"3× (12 · 15 · 45s)", t:"—", r:60,
-    note:"All three back-to-back, rest 60s, ×3. Biggest ab day of the week."}
+   {n:"Abs circuit: GHD Sit-ups · GHD Trunk Twists · Cable Rotations", link:"GHD Sit-up", m:"Abs (extended)", s:"3× (10 · 10/side · 10/side)", t:"—", r:60,
+    note:"All three back-to-back, rest 60s, ×3. Biggest ab day of the week — Saturday has the time for it. Twist & rotation videos are in the Videos tab."}
   ]}
 ];
 
@@ -325,8 +390,7 @@ const LIB = [
  ["Leg Press","Quads/Glutes","Low feet = quad; knees to 90°+ without hips lifting."],
  ["Belt Squat","Quads/Glutes","Low-back-friendly squat alternative."],
  ["Leg Extension","Quads","Pause at the top, slow negative, high-rep."],
- ["Seated Leg Curl","Hamstrings","Toes to shin, full squeeze, 3s eccentric."],
- ["Lying Leg Curl","Hamstrings","Hips pinned, full ROM, no bounce."],
+ ["Lying Leg Curl","Hamstrings","Prone leg curl — hips pinned, full ROM, no bounce."],
  ["Seated Calf Raise","Calves","Full stretch + pause at the bottom."],
  ["Hip Thrust","Glutes","Ribs down, full lockout, 1s squeeze."],
  ["Back Extension","Glutes/Hams","Chin tucked, curl up glute-first."],
@@ -334,14 +398,30 @@ const LIB = [
  ["Glute Bridge","Glutes","Hip-thrust alternative, same cues."],
  ["ISO Flat Chest Press","Chest","Handles mid-chest, full stretch, no flare."],
  ["ISO Incline Press","Upper chest","Controlled press, don't over-flare."],
- ["Vertical Chest Press","Chest","Full stretch; balances pull days."],
+ ["Vertical Chest Press","Chest","Machine press substitute; full stretch."],
  ["ISO Shoulder Press","Shoulders","Ribs down; stop short of lockout."],
- ["Viking Press","Shoulders","Neutral grip — shoulder-friendly."],
  ["ISO Lat Pulldown","Lats","Elbows down to hips, tall chest."],
  ["Vertical Row","Lats/Upper back","Lead with elbows, full stretch, no swing."],
  ["ISO Multi Row","Mid-back","Chest supported; pinch the blades."],
- ["Lever Row","Lats/Mid-back","Neutral grip, squeeze & control."],
- ["T-Bar Row","Mid-back","Chest on pad; elbows to hips, pause."]
+ ["BB Overhead Press","Shoulders","Glutes tight, ribs down, bar close to the face."],
+ ["DB Shoulder Press","Shoulders","Full range, no clanking at the top."],
+ ["Landmine Press","Shoulders/Core","Tall-kneeling, press up-and-forward on the arc."],
+ ["Banded Pull-up","Lats","Dead-hang stretch, chest to bar, slow lower."],
+ ["Seated Cable Row","Mid-back","Tall chest, elbows back, no rocking."],
+ ["Lat Pulldown","Lats","Elbows to hips, bar to collarbone."],
+ ["BB RDL","Hams/Glutes","Hips back, bar close, stop at hamstring stretch."],
+ ["BB Deadlift","Hams/Glutes/Back","RDL alternative — heavier, from the floor."],
+ ["BB Walking Lunge","Glutes/Quads","Forward-week lunge; long stride, slight lean; deficit = Wk6–8."],
+ ["BB Reverse Lunge","Glutes/Quads","Reverse-week lunge; step back, knee-friendlier, more glute."],
+ ["DB Step-up","Glutes/Quads","Knee-height box, don't push off the floor leg."],
+ ["BB Push Press","Shoulders/Full body","Knee dip → leg drive → punch overhead; slow lower."],
+ ["DB Clean & Press","Full body","Hips pop DBs to shoulders, leg-drive press; crisp reps only."],
+ ["Incline BB Push-up","Chest/Core","Bar in rack, rigid plank, chest to bar; lower pin = harder."],
+ ["Arnold Press","Shoulders","Seated; rotate palms from facing-you to forward as you press."],
+ ["GHD Sit-up","Abs","Modest range first; add range then load over weeks."],
+ ["GHD Twist","Obliques","Arms out, rotate under control, no flopping."],
+ ["Cable Trunk Rotation","Obliques/Core","Cable chest-height, arms long, rotate the torso not the arms."],
+ ["Kipping K2E","Abs/Lats/Grip","Rhythm kip, knees to elbows; scale = knees to chest."]
 ];
 
 /* ================= STORAGE (localStorage w/ in-memory fallback) ================= */
@@ -430,13 +510,18 @@ function refreshPrev(dId, exIdx){
 function workoutHTML(){
   const d = DAYS.find(x=>x.id===day);
   const isDeload = week===5;
-  let h = `<div class="daypick">` + DAYS.map((x,ix)=>
+  const isPink = d.color.includes("blue"); // legacy var --blue maps to pink
+  const acc = isPink ? "#F2E3EF" : "#D6FFFA";
+  const accSoft = isPink ? "rgba(242,227,239,.14)" : "rgba(214,255,250,.12)";
+  const accDim = isPink ? "rgba(242,227,239,.65)" : "rgba(214,255,250,.65)";
+  let h = `<div style="--acc:${acc};--acc-soft:${accSoft};--acc-dim:${accDim}">`;
+  h += `<div class="daypick">` + DAYS.map((x,ix)=>
     `<button class="${x.id===day?'on':''}" style="${x.id===day?`background:${x.color}`:''}" onclick="setDay('${x.id}')">D${ix+1}<small>${x.label}</small></button>`
   ).join("") + `</div>`;
 
   h += `<div class="banner" style="background:${d.color}">${d.title}<small>${d.time}</small></div>`;
-  h += `<div class="card"><div class="pad" style="font-size:12.5px;color:var(--sub)">🔥 ${d.warm}</div></div>`;
-  if(isDeload) h += `<div class="card" style="background:var(--deload);border-color:#EED9B8"><div class="pad" style="font-size:12.5px;color:#7A4A12"><b>Deload week:</b> ~60% of Week-4 loads and drop one set per exercise. Easy does it — on purpose.</div></div>`;
+  h += `<div class="card" style="border-left:3px solid var(--surface3)"><div class="pad" style="font-size:12.5px;color:var(--sub)"><b style="color:var(--gray);text-transform:uppercase;font-size:10px;letter-spacing:.08em">Warm-up</b><br>${d.warm.replace(/^Warm-up\s*\([^)]*\):\s*/,"")}</div></div>`;
+  if(isDeload) h += `<div class="card" style="background:var(--deload);border-left:3px solid var(--pink)"><div class="pad" style="font-size:12.5px;color:var(--pink)"><b style="color:#fff">Deload week:</b> ~60% of Week-4 loads and drop one set per exercise. Easy does it — on purpose.</div></div>`;
 
   d.ex.forEach((e,i)=>{
     const link = e.link ? `<a href="${LINKS[e.link]}" target="_blank" rel="noopener">${esc(e.n)}</a>` : esc(e.n);
@@ -450,7 +535,7 @@ function workoutHTML(){
         <div class="exname">${i+1}. ${link}</div>
         <div class="muscle">${esc(e.m)}</div>
         <div class="chips">
-          <div class="chip"><span>sets × reps</span>${sets}${isDeload&&sets!==e.s?' <small style="color:#B0691E">(deload)</small>':''}</div>
+          <div class="chip"><span>sets × reps</span>${sets}${isDeload&&sets!==e.s?' <small style="color:var(--pink)">(deload)</small>':''}</div>
           <div class="chip"><span>tempo</span>${e.t}</div>
           <div class="chip rest" onclick="Timer.start(${e.r})"><span>rest — tap ⏱</span>${e.r>=120?(e.r/60)+" min":e.r+"s"}</div>
         </div>
@@ -472,7 +557,8 @@ function workoutHTML(){
   if(!Store.persistent){
     h += `<div class="footer">⚠️ This browser is blocking saved data — logs will reset when the page closes. Open the file in Safari (not a preview) for logging to stick.</div>`;
   }
-  h += `<div class="footer">Tap an exercise name for machine media · tap the rest chip to start the timer<br>Logs save on this device only.</div>`;
+  h += `<div class="footer">Tap an exercise name for a how-to video · tap the rest chip to start the timer<br>Logs save on this device only.</div>`;
+  h += `</div>`;
   return h;
 }
 
@@ -511,8 +597,9 @@ function guideHTML(){
 }
 
 function libraryHTML(){
-  let h = `<div class="banner" style="background:var(--navy)">Machine Library<small>Every machine → cue + tap for full media</small></div>`;
-  h += `<div class="card"><div class="pad lib"><a href="${LINKS["Tutorials"]}" target="_blank" rel="noopener">▶ Arsenal Strength video tutorials (YouTube)</a><div class="cue">Official how-to playlist — great first stop for any new machine.</div></div></div>`;
+  let h = `<div class="banner" style="background:var(--navy)">Exercise Library<small>Every machine & free-weight lift → setup cue + tap the name for a how-to video</small></div>`;
+  h += `<div class="card"><div class="pad lib"><a href="${LINKS["Tutorials"]}" target="_blank" rel="noopener">▶ Arsenal Strength machine tutorials (YouTube playlist)</a><div class="cue">Walkthroughs of Arsenal machines — good first stop for any unfamiliar piece.</div></div></div>`;
+  h += `<div class="card"><div class="pad lib"><a href="${LINKS["BB Tutorials"]}" target="_blank" rel="noopener">▶ Booty Builder official instructional videos (YouTube playlist)</a><div class="cue">The maker's own how-to videos for the hip thrust, back extension & abductor.</div></div></div>`;
   LIB.forEach(m=>{
     const url = LINKS[m[0]];
     h += `<div class="card"><div class="pad lib">${url?`<a href="${url}" target="_blank" rel="noopener">${m[0]}</a>`:`<b>${m[0]}</b>`} <span style="font-size:11px;color:var(--sub)">· ${m[1]}</span><div class="cue">${m[2]}</div></div></div>`;
@@ -520,8 +607,178 @@ function libraryHTML(){
   return h;
 }
 
+/* ================= INTERVAL TIMER ================= */
+const IT = {
+  running:false, paused:false, phase:"idle", // warmup | work | rest | done
+  left:0, round:1, totalLeft:0, iv:null, cfg:null, wakeLock:null, actx:null
+};
+function itGet(k,d){ const v=Store.get("la.it."+k); return v===null?d:v; }
+function itSet(k,v){ Store.set("la.it."+k, String(v)); }
+
+function itBeep(pattern){ // pattern: array of [freqHz, ms] with 80ms gaps
+  try{
+    if(!IT.actx) IT.actx = new (window.AudioContext||window.webkitAudioContext)();
+    const ctx = IT.actx; if(ctx.state==="suspended") ctx.resume();
+    let t = ctx.currentTime;
+    pattern.forEach(([f,ms])=>{
+      const o=ctx.createOscillator(), g=ctx.createGain();
+      o.type="sine"; o.frequency.value=f; o.connect(g); g.connect(ctx.destination);
+      g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.5,t+0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001,t+ms/1000);
+      o.start(t); o.stop(t+ms/1000+0.05); t += ms/1000 + 0.08;
+    });
+  }catch(e){}
+  try{ navigator.vibrate && navigator.vibrate(pattern.map(p=>p[1])); }catch(e){}
+}
+async function itWake(on){
+  try{
+    if(on && "wakeLock" in navigator){ IT.wakeLock = await navigator.wakeLock.request("screen"); }
+    else if(IT.wakeLock){ IT.wakeLock.release(); IT.wakeLock=null; }
+  }catch(e){}
+}
+function itReadCfg(){
+  const g=id=>document.getElementById(id);
+  const work = Math.max(5, parseInt(g("it-work").value)||45);
+  const rest = Math.max(0, parseInt(g("it-rest").value)||45);
+  const mode = IT.mode||"rounds";
+  const rounds = Math.max(1, parseInt(g("it-rounds") ? g("it-rounds").value : 10)||10);
+  const mins = Math.max(1, parseInt(g("it-mins") ? g("it-mins").value : 18)||18);
+  const warm = g("it-warm").checked;
+  itSet("work",work); itSet("rest",rest); itSet("mode",mode);
+  itSet("rounds",rounds); itSet("mins",mins); itSet("warm",warm?1:0);
+  const cycle = work+rest;
+  const totalSec = mode==="rounds" ? rounds*cycle : mins*60;
+  const estRounds = mode==="rounds" ? rounds : Math.max(1, Math.ceil(mins*60/cycle));
+  return {work, rest, mode, rounds:estRounds, warm, warmSec: warm?120:0, totalSec};
+}
+function itStart(){
+  const cfg = itReadCfg();
+  IT.cfg=cfg; IT.running=true; IT.paused=false; IT.round=1;
+  IT.totalLeft = cfg.totalSec + cfg.warmSec;
+  if(cfg.warm){ IT.phase="warmup"; IT.left=cfg.warmSec; }
+  else { IT.phase="work"; IT.left=cfg.work; }
+  itBeep([[880,150],[880,150]]);
+  itWake(true);
+  if(IT.iv) clearInterval(IT.iv);
+  IT.iv = setInterval(itTick, 1000);
+  renderMain();
+}
+function itTick(){
+  if(IT.paused) return;
+  IT.left--; IT.totalLeft--;
+  const c=IT.cfg;
+  // countdown pips for last 3s of any phase
+  if(IT.left<=3 && IT.left>0 && IT.phase!=="done") itBeep([[660,90]]);
+  if(IT.totalLeft<=0){ itFinish(); return; }
+  if(IT.left<=0){
+    if(IT.phase==="warmup"){ IT.phase="work"; IT.left=c.work; itBeep([[880,150],[1100,220]]); }
+    else if(IT.phase==="work"){
+      if(c.rest>0){ IT.phase="rest"; IT.left=c.rest; itBeep([[520,300]]); }
+      else { IT.round++; IT.left=c.work; itBeep([[880,150],[1100,220]]); }
+    }
+    else if(IT.phase==="rest"){
+      if(c.mode==="rounds" && IT.round>=c.rounds){ itFinish(); return; }
+      IT.round++; IT.phase="work"; IT.left=c.work; itBeep([[880,150],[1100,220]]);
+    }
+  }
+  itPaint();
+}
+function itFinish(){
+  IT.phase="done"; IT.running=false;
+  clearInterval(IT.iv); IT.iv=null;
+  itBeep([[880,180],[1100,180],[1320,400]]);
+  itWake(false);
+  itPaint();
+}
+function itStop(){
+  IT.running=false; IT.phase="idle";
+  if(IT.iv) clearInterval(IT.iv); IT.iv=null;
+  itWake(false);
+  renderMain();
+}
+function itPauseToggle(){
+  IT.paused=!IT.paused;
+  const b=document.getElementById("it-pause");
+  if(b) b.textContent = IT.paused ? "Resume" : "Pause";
+  itPaint();
+}
+function itFmt(s){ s=Math.max(0,s); return Math.floor(s/60)+":"+String(s%60).padStart(2,"0"); }
+const IT_COLORS = {warmup:"#CDCECA", work:"#D6FFFA", rest:"#F2E3EF", done:"#D6FFFA"};
+const IT_LABELS = {warmup:"Warm-up · easy", work:"WORK — push", rest:"Rest — easy", done:"Done — cool down easy 1–2 min"};
+function itPaint(){
+  const d=document.getElementById("itdisplay"); if(!d) return;
+  d.style.background = IT_COLORS[IT.phase] || "#33415C";
+  const c=IT.cfg||{};
+  d.querySelector(".phase").textContent = IT_LABELS[IT.phase] || "";
+  d.querySelector(".clock").textContent = IT.phase==="done" ? "🎉" : itFmt(IT.left);
+  d.querySelector(".meta").textContent = IT.phase==="done"
+    ? `Finished — ${c.rounds||""} rounds of ${c.work}s / ${c.rest}s`
+    : (IT.phase==="warmup" ? `Intervals start after warm-up · total left ${itFmt(IT.totalLeft)}`
+       : `Round ${IT.round}${c.rounds?" / "+c.rounds:""} · total left ${itFmt(IT.totalLeft)}`);
+  const total=(c.totalSec||0)+(c.warmSec||0);
+  const frac= total? (1 - IT.totalLeft/total) : 0;
+  d.querySelector(".bar div").style.width = Math.min(100, Math.max(0, frac*100))+"%";
+}
+function itMode(m){ IT.mode=m; itSet("mode",m); renderMain(); }
+function itPreset(w,r,n){
+  IT.mode="rounds"; itSet("mode","rounds");
+  itSet("work",w); itSet("rest",r); itSet("rounds",n);
+  renderMain();
+}
+function itimerHTML(){
+  IT.mode = IT.mode || itGet("mode","rounds");
+  if(IT.running || IT.phase==="done"){
+    // running / finished screen
+    setTimeout(itPaint, 0);
+    return `
+    <div id="itdisplay">
+      <div class="phase"></div>
+      <div class="clock"></div>
+      <div class="meta"></div>
+      <div class="bar"><div></div></div>
+    </div>
+    <div class="itbtns">
+      ${IT.running?`<button id="it-pause" style="background:var(--slate)" onclick="itPauseToggle()">${IT.paused?"Resume":"Pause"}</button>`:""}
+      <button style="background:${IT.running?"#3A2A2E;color:#F0B9C9":"var(--aqua);color:var(--dark)"}" onclick="itStop()">${IT.running?"End":"New timer"}</button>
+    </div>
+    <div class="footer">Keep the phone awake &amp; volume up — beeps mark every switch.<br>3 pips = phase about to change · high double-beep = WORK · low beep = rest.</div>`;
+  }
+  const mode=IT.mode;
+  const work=itGet("work",45), rest=itGet("rest",45), rounds=itGet("rounds",10), mins=itGet("mins",18), warm=itGet("warm","1")==="1";
+  return `
+  <div class="banner" style="background:var(--orange)">Interval Timer<small>Set your work / rest and go — beeps &amp; buzzes mark every switch, so no staring at the clock mid-sprint.</small></div>
+  <div class="card"><div class="pad">
+    <div class="loglabel" style="margin-top:0">This week's protocol (one tap)</div>
+    <div class="presets">
+      <button onclick="itPreset(45,45,10)">Wk1–2 · 45/45 ×10</button>
+      <button onclick="itPreset(30,30,15)">Wk3–4 · 30/30 ×15</button>
+      <button onclick="itPreset(120,60,5)">Wk6–7 · 2min/1min ×5</button>
+    </div>
+    <div class="loglabel">Work &amp; rest (this is your ratio)</div>
+    <div class="logrow">
+      <div class="itfield"><label>Work (sec)</label><input id="it-work" type="number" inputmode="numeric" min="5" value="${work}"></div>
+      <div class="itfield"><label>Rest (sec)</label><input id="it-rest" type="number" inputmode="numeric" min="0" value="${rest}"></div>
+    </div>
+    <div class="loglabel">Run it by…</div>
+    <div class="seg">
+      <button class="${mode==='rounds'?'on':''}" onclick="itMode('rounds')">Rounds</button>
+      <button class="${mode==='time'?'on':''}" onclick="itMode('time')">Total minutes</button>
+    </div>
+    <div class="logrow">
+      ${mode==='rounds'
+        ? `<div class="itfield"><label>Rounds</label><input id="it-rounds" type="number" inputmode="numeric" min="1" value="${rounds}"></div>`
+        : `<div class="itfield"><label>Total minutes</label><input id="it-mins" type="number" inputmode="numeric" min="1" value="${mins}"></div>`}
+    </div>
+    <label style="display:flex;align-items:center;gap:8px;margin-top:12px;font-size:13px;font-weight:600;color:var(--slate)">
+      <input id="it-warm" type="checkbox" ${warm?"checked":""} style="width:18px;height:18px"> Start with 2-min easy warm-up
+    </label>
+    <button class="bigbtn" style="background:var(--green)" onclick="itStart()">▶ Start</button>
+  </div></div>
+  <div class="footer">Rounds mode: work+rest × rounds (45/45 ×10 ≈ 15 min).<br>Total-minutes mode: cycles work/rest until time runs out.<br>Settings are remembered for next time.</div>`;
+}
+
 function renderMain(){
-  const v = {workout:workoutHTML, cardio:cardioHTML, guide:guideHTML, library:libraryHTML}[view];
+  const v = {workout:workoutHTML, cardio:cardioHTML, itimer:itimerHTML, guide:guideHTML, library:libraryHTML}[view];
   $("main").innerHTML = v();
 }
 
